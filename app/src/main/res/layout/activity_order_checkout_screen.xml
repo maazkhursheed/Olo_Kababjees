@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.attribes.Kababjees.screens.OrderCheckoutScreen"
+        android:background="#e9e9e4">
+
+    <LinearLayout
+            android:id="@+id/firstSubLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#ffffff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Order"
+            android:textSize="28sp"
+            android:textColor="#000000"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+                android:id="@+id/tv_editOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Order"
+                android:textSize="20sp"
+                android:textColor="#f6343f"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="100dp"
+                android:layout_marginStart="100dp"
+                />
+
+        <TextView
+                android:id="@+id/tv_editApplyOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apply Changes"
+                android:textSize="20sp"
+                android:textColor="#f6343f"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="55dp"
+                android:layout_marginStart="55dp"
+                android:visibility="gone"  />
+
+</LinearLayout>
+
+        <!-- Framelayout to display Fragments -->
+        <FrameLayout
+                android:id="@+id/orderframe_container"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"/>
+
+        <TextView
+                android:id="@+id/addProductBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Product"
+                android:textSize="20sp"
+                android:textColor="#f6343f"
+                android:layout_gravity="right"
+                android:layout_marginRight="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/secondSubLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/firstSubLayout"
+            android:layout_marginTop="2dp"
+            android:background="#ffffff"
+            android:paddingTop="5dp"
+            >
+
+        <include layout="@layout/sub_order_total"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/thirdSubLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/secondSubLayout"
+            android:background="#ffffff"
+            android:layout_above="@+id/checkoutBtn"
+            android:layout_marginTop="2dp">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="20dp"
+                android:paddingStart="20dp"
+                android:paddingRight="20dp"
+                android:paddingEnd="20dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total"
+                    android:textColor="#000000"
+                    android:textSize="22sp"
+                   />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs "
+                    android:textColor="#000000"
+                    android:layout_gravity="right"
+                    android:textSize="22sp"
+                    android:layout_marginLeft="150dp"
+                    android:layout_marginStart="150dp"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_allTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1069067"
+                    android:textColor="#000000"
+                    android:layout_gravity="end"
+                    android:textSize="22sp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginStart="2dp"
+                   />
+
+        </LinearLayout>
+    </LinearLayout>
+
+<Button
+        android:id="@+id/checkoutBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Checkout"
+        android:textColor="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:background="@color/greeen_color"/>
+
+</RelativeLayout>

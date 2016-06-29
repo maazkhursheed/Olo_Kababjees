@@ -1,0 +1,140 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".screens.fragments.UserInfo"
+              android:orientation="horizontal"
+               android:background="@color/white_text_color">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <!--<RelativeLayout-->
+            <!--android:id="@+id/logo"-->
+            <!--android:layout_width="match_parent" android:layout_height="wrap_content"-->
+                    <!--&gt;-->
+
+    <!--</RelativeLayout>-->
+    <!--<include layout="@layout/fragments_toolbar"-->
+             <!--android:id="@+id/user_info_toolbar"/>-->
+
+    <!--android:layout_below="@+id/user_info_toolbar"-->
+    <LinearLayout
+
+            
+            android:id="@+id/user_info_mainlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="3"
+    android:layout_margin="15dp"
+    >
+
+
+        <!--<FrameLayout-->
+                <!--android:id="@+id/fragment_order_"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginTop="100dp"-->
+                <!--android:layout_marginStart="100dp"-->
+                <!--android:layout_marginEnd="100dp"-->
+                <!--android:visibility="gone"-->
+        <!--&gt;-->
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter Your Name"
+                android:layout_weight="0.5"
+                android:textStyle="bold"
+        android:textColor="@android:color/darker_gray"/>
+
+        <EditText
+                android:id="@+id/edittxt_username"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+
+
+        android:layout_weight="0.5"
+            android:maxLength="35"/>
+        <!--android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"-->
+
+        <!--android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"-->
+        <!--android:maxLength="35"-->
+        <!--android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"-->
+
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter Your Phone Number"
+                android:layout_weight="0.5"
+                android:textStyle="bold"
+                android:textColor="@android:color/darker_gray"/>
+
+        <EditText
+                android:id="@+id/edittxt_userphone"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+
+                android:layout_weight="0.5"
+                android:inputType="phone"/>
+
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter Your Address"
+                android:layout_weight="0.5"
+                android:textStyle="bold"
+                android:textColor="@android:color/darker_gray"/>
+
+        <EditText
+                android:id="@+id/edittxt_useraddress"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+
+                android:layout_weight="0.5"/>
+
+        <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/confirm_btn"
+        android:text="Proceed"
+        android:background="@color/greeen_color"
+        android:textColor="@color/white_text_color"/>
+
+        <!--</FrameLayout>-->
+
+
+
+
+    </LinearLayout>
+    <FrameLayout
+            android:id="@+id/fragment_order_thankyouFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:visibility="gone">
+        <!--android:layout_marginTop="100dp"-->
+        <!--android:layout_marginStart="100dp"-->
+        <!--android:layout_marginEnd="100dp"-->
+
+        <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Thank You.!-->
+                              <!--Your order has been placed."-->
+                <!--android:textColor="@android:color/background_dark"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textSize="30sp"/>-->
+        <include layout="@layout/thankyou_message"/>
+        <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Your order has been placed."-->
+
+                <!--android:textColor="@android:color/darker_gray"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textSize="30sp"/>-->
+
+    </FrameLayout>
+
+
+</RelativeLayout>

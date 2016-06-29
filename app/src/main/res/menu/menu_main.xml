@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".screens.Screens.MainActivity">
+    <!--<item android:id="@+id/action_settings"-->
+          <!--android:title="@string/action_settings"-->
+          <!--android:orderInCategory="100"-->
+          <!--app:showAsAction="never"/>-->
+    <item android:id="@+id/cart"
+          android:title="@string/action_cart"
+          android:orderInCategory="10"
+          android:icon="@drawable/add_to_cart"
+          app:showAsAction="always"/>
+    <item android:id="@+id/cart_text"
+          android:title=""
+          android:orderInCategory="20"
+
+          app:showAsAction="always"/>
+
+</menu>

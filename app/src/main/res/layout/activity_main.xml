@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+>
+
+<android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+>
+
+
+
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <include android:id="@+id/toolbar_main"
+             layout="@layout/tool_bar"></include>
+    <!-- Framelayout to display Fragments -->
+
+    <FrameLayout
+            android:id="@+id/frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+    android:background="@drawable/home_image_kbj"/>
+    <!--<TextView android:layout_width="match_parent" android:layout_height="wrap_content"-->
+    <!--android:text="Home COntent Goes Here"/>-->
+</LinearLayout>
+
+    <!-- Listview to display slider menu -->
+    <ListView
+            android:id="@+id/list_slidermenu"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:choiceMode="singleChoice"
+            android:divider="@color/list_divider"
+            android:dividerHeight="1dp"
+            android:listSelector="@drawable/list_selector"
+            android:background="@color/list_background"
+               />
+
+    <ImageView
+            android:id="@+id/internetImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/no_internet"
+            android:visibility="gone"/>
+
+    <ImageView
+            android:id="@+id/wrongImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/wrong"
+            android:visibility="gone"/>
+
+</android.support.v4.widget.DrawerLayout>
+
+
+    </LinearLayout>

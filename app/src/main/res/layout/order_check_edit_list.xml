@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="15dp">
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp">
+
+    <EditText
+              android:id="@+id/editItemQuantity"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:hint=""
+              android:inputType="number"
+              android:imeOptions="actionDone"
+              android:cursorVisible="true"
+              android:maxLength="4"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="x"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+              />
+
+    <TextView
+            android:id="@+id/ediItemName"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:text="Spicy Chicken Burger(Value Meal)"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:maxLines="2"
+    android:layout_marginBottom="15dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="9dp"
+            android:layout_marginEnd="9dp">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rs."
+            android:layout_gravity="right|center"
+            android:textColor="#000000"/>
+
+    <TextView
+            android:id="@+id/editItemCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10,480"
+            android:layout_gravity="right|center"
+            android:textColor="#000000"/>
+
+    <TextView
+            android:id="@+id/editItemCross"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="22dp"
+            android:layout_marginStart="22dp"
+            android:layout_gravity="right"
+            android:textColor="#ea2424"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

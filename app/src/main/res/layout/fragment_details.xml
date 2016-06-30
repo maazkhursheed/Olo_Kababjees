@@ -130,7 +130,8 @@
             <include
                     layout="@layout/custom_picker"
                     android:layout_margin="15dp"
-                    android:id="@+id/myquantity_picker"/>
+                    android:id="@+id/myquantity_picker"
+                    />
 
     </RelativeLayout>
             <!--Existing Quantity shown-->
@@ -217,7 +218,7 @@
                     android:id="@+id/addcart_btn"
                     android:textColor="@android:color/white"
                     android:layout_gravity="center"
-                    android:layout_weight="1.50"
+                    android:layout_weight="1.52"
                     android:layout_alignParentRight="false"
                     android:layout_alignParentEnd="false"
 

@@ -90,21 +90,9 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
     }
 
-//    private void checkInternetConectivity() {
-//
-//        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-//        receiver = new NetworkChangeReceiver();
-//        registerReceiver(receiver, filter);
-//
-//    }
 
-    @Override
-    protected void onDestroy() {
-        Log.v(LOG_TAG, "onDestory");
-        super.onDestroy();
 
-       // unregisterReceiver(receiver);
-    }
+
 
     @Override
     protected void onResume() {
@@ -358,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         //mDrawerLayout.closeDrawers();
         setDrawerclosed();
 
-        Toast.makeText(getApplicationContext(), Constants.No_Internet_Connection,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), Constants.No_Internet_Connection,Toast.LENGTH_SHORT).show();
     }
 
     private class SlideMenuClickListener implements AdapterView.OnItemClickListener {
@@ -438,39 +426,28 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         alert.show();
 
     }
+    @Override
+    protected void onDestroy() {
+        Log.v(LOG_TAG, "onDestory");
+        super.onDestroy();
+        NetworkChangeReceiver.getInstance().setConnectivityListener(this);
 
-//    private class NetworkChangeReceiver extends BroadcastReceiver {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            Log.v(LOG_TAG, "Receieved notification about com.example.maaz.olo.screens.network status");
-//            isNetworkAvailable(context);
-//        }
-//        private boolean  isNetworkAvailable(Context context) {
-//
-//            ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//            if (connectivity != null) {
-//                NetworkInfo[] info = connectivity.getAllNetworkInfo();
-//                if (info != null) {
-//                    for (int i = 0; i < info.length; i++) {
-//                        if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-//                            if(!isConnected){
-//                                Log.v(LOG_TAG, "Now you are connected to Internet!");
-//                                internetImage.setVisibility(View.GONE);
-//                                mDrawerList.setVisibility(View.VISIBLE);
-//
-//
-//                                isConnected = true;
-//                            }
-//                            return true;
-//                        }
-//                    }
-//                }
-//            }
-//            Log.v(LOG_TAG, "You are not connected to Internet!");
-//            mDrawerList.setVisibility(View.GONE);
-//            internetImage.setVisibility(View.VISIBLE);
-//            isConnected = false;
-//            return false;
-//        }
-//    }
+
+        // unregisterReceiver(receiver);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NetworkChangeReceiver.getInstance().setConnectivityListener(this);
+
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+        NetworkChangeReceiver.getInstance().setConnectivityListener(this);
+
+    }
 }

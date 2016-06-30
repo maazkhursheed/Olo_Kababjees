@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import com.attribes.olo.kababjees.Interfaces.NetworkConnectivityListener;
+import com.attribes.olo.kababjees.Screens.MainActivity;
 
 /**
  * Created by attribe on 6/24/16.
@@ -38,6 +40,9 @@ public class NetworkChangeReceiver  extends BroadcastReceiver {
         Log.v(LOG_TAG, "Receieved notification about com.example.maaz.olo.screens.network status");
         boolean networkAvailable = isNetworkAvailable(context);
 
+       //listener= (NetworkConnectivityListener) getInstance();
+//        AppCompatActivity activity= (MainActivity) context;
+//        listener= (NetworkConnectivityListener)activity;
 
         if(networkAvailable){
             listener.onNetworkConnetced();

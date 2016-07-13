@@ -6,7 +6,7 @@
                 android:paddingStart="20dp"
                 android:paddingRight="20dp"
                 android:paddingEnd="20dp"
-               >
+                android:paddingBottom="10dp" >
 
     <RelativeLayout
             android:layout_width="match_parent"

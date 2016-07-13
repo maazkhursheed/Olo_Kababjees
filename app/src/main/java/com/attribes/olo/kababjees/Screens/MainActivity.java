@@ -86,24 +86,18 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         drawer_Toggle_Handling(savedInstanceState);    //  enabling action bar app icon and behaving it as toggle button
        // mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-
-
     }
-
-
-
 
 
     @Override
     protected void onResume() {
         super.onResume();
+        NetworkChangeReceiver.getInstance().setConnectivityListener(this);
         getCategory();
     }
 
-    public void setDraweropened()
-    {
-        mDrawerLayout.openDrawer(mDrawerList);
-    }
+    public void setDraweropened() { mDrawerLayout.openDrawer(mDrawerList); }
+
     public void setDrawerclosed(){
         mDrawerLayout.closeDrawer(mDrawerList);
     }
@@ -182,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
             @Override
             public void success(ArrayList<Category> categories, Response response) {
                 //hideProgress();
+                categories.size();
                 categoryAdapter = new CategoryAdapter(getApplicationContext(), categories);
                 mDrawerList.setAdapter(categoryAdapter);
             }
@@ -335,8 +330,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
             //  setDraweropened();
         }
 
-        else
-        {
+        else {
            setDraweropened();
         }
     }

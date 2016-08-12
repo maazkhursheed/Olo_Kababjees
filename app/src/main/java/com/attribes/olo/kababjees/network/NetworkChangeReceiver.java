@@ -40,15 +40,11 @@ public class NetworkChangeReceiver  extends BroadcastReceiver {
         Log.v(LOG_TAG, "Receieved notification about com.example.maaz.olo.screens.network status");
         boolean networkAvailable = isNetworkAvailable(context);
 
-       //listener= (NetworkConnectivityListener) getInstance();
-//        AppCompatActivity activity= (MainActivity) context;
-//        listener= (NetworkConnectivityListener)activity;
-
-        if(networkAvailable){
+        if(networkAvailable == true){
             listener.onNetworkConnetced();
         }
 
-        if(!networkAvailable){
+        if(networkAvailable == false){
             listener.onNetworkDisconnected();
         }
     }

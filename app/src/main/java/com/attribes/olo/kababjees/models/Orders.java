@@ -12,10 +12,11 @@ public class Orders {
     private String address;
     private double order_total;
     private int order_time;
+    private int device_os;
     private ArrayList<order_detail> order_detail;
 
     public Orders(String userName, String userPhone,
-                  String userAddress, double ordertotal, int order_time, ArrayList<order_detail> order_detail) {
+                  String userAddress, double ordertotal, int order_time, int device_os, ArrayList<order_detail> order_detail) {
 
 
         this.name=userName;
@@ -23,6 +24,7 @@ public class Orders {
         this.address=userAddress;
         this.order_total =ordertotal;
         this.order_time = order_time;
+        this.device_os = device_os;
         this.order_detail = order_detail;
     }
 }

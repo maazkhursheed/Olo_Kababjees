@@ -26,10 +26,10 @@ import org.acra.sender.HttpSender;
                 ReportField.PACKAGE_NAME,
                 ReportField.REPORT_ID,
                 ReportField.BUILD,
-                ReportField.STACK_TRACE
-        },
-        mode = ReportingInteractionMode.TOAST,
-        resToastText = R.string.toast_crash
+                ReportField.STACK_TRACE }
+//        },
+//        mode = ReportingInteractionMode.TOAST,
+//        resToastText = R.string.toast_crash
 )
 
 public class MainApp extends Application {

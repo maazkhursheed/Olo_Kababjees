@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -88,10 +90,22 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        NetworkChangeReceiver.getInstance().setConnectivityListener(this);
+//        getCategory();
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        ComponentName component=new ComponentName(this, NetworkChangeReceiver.class);
+        getPackageManager().setComponentEnabledSetting(component,
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                            PackageManager.DONT_KILL_APP);
         NetworkChangeReceiver.getInstance().setConnectivityListener(this);
         getCategory();
     }
@@ -103,8 +117,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
     }
 
 
-    private void drawer_Toggle_Handling(Bundle savedInstanceState)
-    {
+    private void drawer_Toggle_Handling(Bundle savedInstanceState) {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, null, R.string.app_name, R.string.app_name) {
 
             public void onDrawerClosed(View view) {
@@ -164,8 +177,6 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
     }
 
-
-
     private void getCategory() {
 
         // showProgress("Loading......!");
@@ -183,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                Toast.makeText(getApplicationContext(), Constants.Server_Error, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), Constants.Server_Error, Toast.LENGTH_SHORT).show();
 
                 //hideProgress();
 //                mDrawerList.setVisibility(View.GONE);
@@ -265,7 +276,6 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
     }
 
 
-
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if nav drawer is opened, hide the action items
@@ -321,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
     @Override
     public void onNetworkConnetced() {
-       // Toast.makeText(getApplicationContext(), Constants.Internet_Connected, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), Constants.Internet_Connected, Toast.LENGTH_SHORT).show();
         getCategory();
         Fragment currentFragment = getFragmentManager().findFragmentById(R.id.frame_container);
 
@@ -342,6 +352,9 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
         Toast.makeText(getApplicationContext(), Constants.No_Internet_Connection,Toast.LENGTH_SHORT).show();
     }
+
+
+    //====================================End of Local Interface overriden methods ====================================//
 
     private class SlideMenuClickListener implements AdapterView.OnItemClickListener {
         @Override
@@ -367,17 +380,11 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
     }
 
-
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
         getSupportActionBar().setTitle(mTitle);
     }
-
-    /**
-     * When using the ActionBarDrawerToggle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -420,28 +427,34 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         alert.show();
 
     }
-    @Override
-    protected void onDestroy() {
-        Log.v(LOG_TAG, "onDestory");
-        super.onDestroy();
-        NetworkChangeReceiver.getInstance().setConnectivityListener(this);
-
-
-        // unregisterReceiver(receiver);
-    }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NetworkChangeReceiver.getInstance().setConnectivityListener(this);
 
+        ComponentName component=new ComponentName(this, NetworkChangeReceiver.class);
+        getPackageManager().setComponentEnabledSetting(component,
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP);
+        NetworkChangeReceiver.getInstance().setConnectivityListener(this);
     }
 
     @Override
     protected void onStop() {
-
         super.onStop();
         NetworkChangeReceiver.getInstance().setConnectivityListener(this);
-
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+       NetworkChangeReceiver.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NetworkChangeReceiver.getInstance().setConnectivityListener(this);
+    }
+
 }

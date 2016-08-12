@@ -48,6 +48,7 @@ public class UserInfo extends Fragment {
     private LinearLayout userinfo_linear;
     private Button button_confirm;
     private String userName,userPhone,userAddress;
+    private int platform_os = 1;
     private OnDrawerToggleListner mListner;
     private ProgressDialog progressDialog;
     SharedPreferences mPrefs ;
@@ -310,7 +311,7 @@ public class UserInfo extends Fragment {
                         orderdetail.add(detail);
                     }
 
-                    Orders placeorders = new Orders(userName, userPhone, userAddress, ordertotal, orderTime, orderdetail);
+                    Orders placeorders = new Orders(userName, userPhone, userAddress, ordertotal, orderTime, platform_os, orderdetail);
                     showProgress("Loading.....");
                     RestClient.getAdapter().placeOrder(placeorders, new Callback<OrderResponse>() {
                         @Override

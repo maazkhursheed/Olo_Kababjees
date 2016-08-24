@@ -44,7 +44,7 @@ public class NetworkChangeReceiver  extends BroadcastReceiver {
             listener.onNetworkConnetced();
         }
 
-        if(networkAvailable == false){
+        else{
             listener.onNetworkDisconnected();
         }
     }
@@ -53,7 +53,7 @@ public class NetworkChangeReceiver  extends BroadcastReceiver {
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        boolean isConnected =  activeNetwork != null && activeNetwork.isConnected() ;
 
         return isConnected ;
     }

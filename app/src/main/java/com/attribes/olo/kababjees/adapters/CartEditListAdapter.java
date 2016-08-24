@@ -1,5 +1,6 @@
 package com.attribes.olo.kababjees.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +82,15 @@ public class CartEditListAdapter extends RecyclerView.Adapter<CartEditListAdapte
             }
         });
 
+        holder.itemEditQuantity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
         holder.itemEditCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +108,11 @@ public class CartEditListAdapter extends RecyclerView.Adapter<CartEditListAdapte
         ItemCart.getOrderableItems().remove(position);
         Toast.makeText(mContext,"Item Removed",Toast.LENGTH_SHORT).show();
         notifyDataSetChanged();
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)mContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

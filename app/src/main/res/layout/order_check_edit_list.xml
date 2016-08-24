@@ -22,7 +22,9 @@
               android:inputType="number"
               android:imeOptions="actionDone"
               android:cursorVisible="true"
-              android:maxLength="4"/>
+              android:maxLength="4"
+              android:clickable="true"
+              android:focusableInTouchMode="true" />
 
     <TextView
             android:layout_width="wrap_content"

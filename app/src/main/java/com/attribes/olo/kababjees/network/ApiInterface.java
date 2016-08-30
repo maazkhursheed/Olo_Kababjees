@@ -1,9 +1,6 @@
 package com.attribes.olo.kababjees.network;
 
-import com.attribes.olo.kababjees.models.Category;
-import com.attribes.olo.kababjees.models.MenusItem;
-import com.attribes.olo.kababjees.models.OrderResponse;
-import com.attribes.olo.kababjees.models.Orders;
+import com.attribes.olo.kababjees.models.*;
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -20,6 +17,8 @@ public interface ApiInterface {
     public static String URL_GET_CATEGORIES ="/categories";
     public static String URL_GET_ITEMS = "/menus";
     public static String URL_PLACE_ORDER = "/orders";
+    public static String URL_PLACE_RESERVATION = "/reservations";
+    public static String URL_BRANCHES = "/branches";
     public static String URL_SYNC ="/categories/sync";
     public static String URL_REGISTER_DEVICE= "/devices";
     public static String URL_GET_KEY="/user/get_api_key";
@@ -35,7 +34,13 @@ public interface ApiInterface {
 
     @POST(URL_PLACE_ORDER)
     void placeOrder(@Body Orders orders, Callback<OrderResponse> responseCallback);
-//
+
+    @POST(URL_PLACE_RESERVATION)
+    void placeReservation(@Body Reservation reservation, Callback<OrderResponse> responseCallback);
+
+    @GET(URL_BRANCHES)
+    void getBranches(Callback<ArrayList<Branches>> callback);
+
 //    @GET(URL_GET_CATEGORIES)
 //    ArrayList<Category> getCategoriesSync();
 

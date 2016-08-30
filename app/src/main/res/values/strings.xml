@@ -32,4 +32,7 @@
     <string name="title_activity_order_checkout_screen">Menu Kababjees</string>
     <string name="toast_crash">App Crashed !</string>
 
+    <string name="select_branch">Select Branch</string>
+    <string name="title_activity_mode_selection">Kababjees</string>
+
 </resources>

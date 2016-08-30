@@ -28,7 +28,7 @@ public class SplashScreen extends Activity {
                 } catch (Exception e) {
                     System.out.println("EXc=" + e);
                 } finally {
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), ModeSelection.class));
                     finish();
                 }
             }

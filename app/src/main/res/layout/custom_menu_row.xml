@@ -49,7 +49,7 @@ android:padding="5dip"
             android:id="@+id/itemmenu_image"
             android:layout_width="60dip"
             android:layout_height="80dip"
-    />
+    android:background="@drawable/kbj"/>
 
 </LinearLayout>
 

@@ -8,16 +8,16 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
+    <!-- android:name=".Screens.MainApp" -->
     <application
-            android:largeHeap="true"
             android:allowBackup="true"
             android:icon="@mipmap/kj_app_icon"
             android:label="@string/app_name"
+            android:largeHeap="true"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme1"
-            android:name=".Screens.MainApp">
+            android:theme="@style/AppTheme1">
         <activity
-                android:name="com.attribes.olo.kababjees.Screens.SplashScreen"
+                android:name=".Screens.SplashScreen"
                 android:screenOrientation="portrait"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
@@ -27,27 +27,27 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.attribes.olo.kababjees.Screens.MainActivity"
-               android:screenOrientation="portrait"
-        >
+                android:name=".Screens.MainActivity"
+                android:screenOrientation="portrait">
         </activity>
         <!-- android:theme="@style/AppTheme -->
         <!-- android:label="@string/title_activity_detail_menu_screen" -->
 
-        <receiver android:name=".network.NetworkChangeReceiver"
-                  android:stopWithTask="true">
+        <receiver
+                android:name=".network.NetworkChangeReceiver"
+                android:stopWithTask="true">
             <intent-filter>
-
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-                <action android:name="android.net.wifi.STATE_CHANGE" />
-
-                </intent-filter>
-
-
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
+                <action android:name="android.net.wifi.STATE_CHANGE"/>
+            </intent-filter>
         </receiver>
 
-
+        <activity
+                android:name=".Screens.ModeSelection"
+                android:label="@string/title_activity_mode_selection"
+                android:theme="@style/AppTheme1">
+        </activity>
     </application>
 
 </manifest>

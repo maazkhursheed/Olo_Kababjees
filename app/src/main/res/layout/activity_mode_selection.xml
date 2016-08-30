@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
+
+    <include android:id="@+id/toolbar_main"
+             layout="@layout/tool_bar"></include>
+
+
+    <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+
+        <Button android:id="@+id/orderOnline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Order now"
+                android:textSize="20sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/greeen_color"
+                android:textColor="@color/white_text_color"/>
+
+        <Button android:id="@+id/reservationPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reserve your seat"
+                android:layout_marginTop="70dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/greeen_color"
+                android:textColor="@color/white_text_color"
+                android:textSize="20sp"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <FrameLayout
+                android:id="@+id/frame_mode_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_image_kbj"/>
+
+    </LinearLayout>
+
+    </LinearLayout>

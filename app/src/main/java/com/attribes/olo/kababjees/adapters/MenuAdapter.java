@@ -82,13 +82,16 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> 
 
             holder.menus_item_desc.setText("" + menus.getDescription());
             holder.menu_item_price.setText("Rs" + " " + (int) menus.getPrice());
+            holder.item_pic.setBackgroundResource(R.drawable.kbj);
 
-        if(menus.getImages().size() > 0) {
-            Picasso.with(mContext).load(menus.getImages().get(0).getUrl()).
-                    placeholder(R.drawable.progress_animation).resize(100, 100).into(holder.item_pic);
-        }else{
-            holder.item_pic.setBackgroundResource(R.drawable.fastfood);
-        }
+//        if(menus.getImages().size() > 0) {
+//            Picasso.with(mContext).load(menus.getImages().get(0).getUrl()).
+//                    placeholder(R.drawable.progress_animation).resize(100, 100).into(holder.item_pic);
+//        }else{
+//            holder.item_pic.setBackgroundResource(R.drawable.fastfood);
+//        }
+
+
 
 //        if (position % 2 == 1) {
 //            holder.itemView.setBackgroundColor(Color.parseColor("#B7B7B7"));

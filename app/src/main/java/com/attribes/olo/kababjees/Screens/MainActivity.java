@@ -22,17 +22,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 import com.attribes.olo.kababjees.Interfaces.*;
 import com.attribes.olo.kababjees.adapters.CategoryAdapter;
 import com.attribes.olo.kababjees.cart.ItemCart;
-import com.attribes.olo.kababjees.fragments.DetailsFragment;
-import com.attribes.olo.kababjees.fragments.MenusFragment;
-import com.attribes.olo.kababjees.fragments.OrderCheckoutFragment;
-import com.attribes.olo.kababjees.fragments.UserInfo;
+import com.attribes.olo.kababjees.fragments.*;
 import com.attribes.olo.kababjees.models.Category;
 import com.attribes.olo.kababjees.models.MenusItem;
 import com.attribes.olo.kababjees.network.NetworkChangeReceiver;
@@ -68,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
     Category category;
     ImageView internetImage;
     ImageView wrongImage;
+    Button reserve ;
 
     private static final String LOG_TAG = "CheckNetworkStatus";
    // private NetworkChangeReceiver receiver;
@@ -81,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         NetworkChangeReceiver.getInstance().setConnectivityListener(this);
         init_views();
        // checkInternetConectivity();
+
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
         getCategory();     //show category on Drawer
@@ -457,4 +453,18 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         NetworkChangeReceiver.getInstance().setConnectivityListener(this);
     }
 
+    private class ReserveListner implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            FrameLayout frameLayout = (FrameLayout)findViewById(R.id.frame_container) ;
+            frameLayout.setBackgroundResource(0);
+
+            ReservationFragment reservefragment = new  ReservationFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frame_container, reservefragment).commit();
+
+            reserve.setVisibility(View.GONE);
+        }
+    }
 }

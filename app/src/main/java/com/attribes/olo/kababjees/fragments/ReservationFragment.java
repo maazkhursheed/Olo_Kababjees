@@ -1,16 +1,18 @@
 package com.attribes.olo.kababjees.fragments;
 
 import android.app.*;
+import android.content.Context;
 import android.content.Intent;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import android.os.Bundle;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
+//import android.app.DatePickerDialog;
+//import android.app.Dialog;
+//import android.app.TimePickerDialog;
 import android.os.StrictMode;
 import android.text.format.DateFormat;
 import android.view.*;
@@ -23,10 +25,15 @@ import com.attribes.olo.kababjees.models.Branches;
 import com.attribes.olo.kababjees.models.OrderResponse;
 import com.attribes.olo.kababjees.models.Reservation;
 import com.attribes.olo.kababjees.network.RestClient;
+import com.wdullaer.materialdatetimepicker.time.Timepoint;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import com.wdullaer.materialdatetimepicker.Utils;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +41,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Maaz on 8/24/2016.
  */
-public class ReservationFragment extends Fragment {
+public class ReservationFragment extends Fragment implements TimePickerDialog.OnTimeSetListener,DatePickerDialog.OnDateSetListener{
 
     private View view;
     private ProgressDialog progressDialog;
@@ -47,6 +54,9 @@ public class ReservationFragment extends Fragment {
     static String dateTime;
     String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+    Object branch;
+    String kbjBranch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,10 +100,11 @@ public class ReservationFragment extends Fragment {
         public void onClick(View v) {
 
             if(getDateandTime.getText().toString().isEmpty()||getName.getText().toString().isEmpty()||
-                    getEmail.getText().toString().isEmpty()||getPhone.getText().toString().isEmpty()||
-                    getPersonsCount.getText().toString().isEmpty()||spinnerBranch.getId()==0) {
+                    getEmail.getText().toString().isEmpty()&& android.util.Patterns.EMAIL_ADDRESS.matcher(getEmail.getText().toString()).matches()||
+                    getPhone.getText().toString().isEmpty()|| getPersonsCount.getText().toString().isEmpty()||
+                    spinnerBranch.getId()==0) {
 
-                Toast.makeText(getActivity().getApplicationContext(),"Fields Missing",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(),"Fields are missing or incorrect",Toast.LENGTH_SHORT).show();
             }
 
             else {
@@ -112,8 +123,8 @@ public class ReservationFragment extends Fragment {
                     @Override
                     public void success(OrderResponse orderResponse, Response response) {
                         hideProgress();
-                        Toast.makeText(getActivity(), "" + response.getStatus() + " Reservation has done successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        Toast.makeText(getActivity(),"Your reservation has been successfully placed ! You will soon receive a confirmation call", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), ModeSelection.class);
                         startActivity(intent);
                     }
 
@@ -157,52 +168,197 @@ public class ReservationFragment extends Fragment {
         progressDialog.dismiss();
     }
 
-//-------------------------------------------- Static Classes for Date and Time Picker ---------------------------------------
+//-------------------------------------------- Static classes for Date and Time Picker ---------------------------------------
 
 
-    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+//    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
+//
+//        @Override
+//        public Dialog onCreateDialog(Bundle savedInstanceState) {
+//            // Use the current time as the default values for the picker
+//            final Calendar c = Calendar.getInstance();
+//            hour = c.get(Calendar.HOUR_OF_DAY);
+//            minute = c.get(Calendar.MINUTE);
+//
+//
+//            // Create a new instance of TimePickerDialog and return it
+//            TimePickerDialog timePickDialogue = new TimePickerDialog(getActivity(), this, hour, minute,
+//                                                                     DateFormat.is24HourFormat(getActivity()));
+//            return timePickDialogue;
+//        }
+//
+//        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//            // Do something with the time chosen by the user
+//            if(getDateandTime.getText()!= null) {
+//
+//                time = hourOfDay + ":" + minute ;
+//                getDateandTime.setText(date+" "+time);
+//            }
+//        }
+//    }
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
 
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+//    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+//
+//        @Override
+//        public Dialog onCreateDialog(Bundle savedInstanceState) {
+//            // Use the current date as the default date in the picker
+//            final Calendar c = Calendar.getInstance();
+//            year = c.get(Calendar.YEAR);
+//            month = c.get(Calendar.MONTH);
+//            day = c.get(Calendar.DAY_OF_MONTH);
+//
+//            // Create a new instance of DatePickerDialog and return it
+//            return new DatePickerDialog(getActivity(), this, year, month, day);
+//        }
+//
+//        public void onDateSet(DatePicker view, int year, int month, int day) {
+//            // Do something with the date chosen by the user
+//            date = day + "/" + (month + 1) + "/" + year ;
+//            getDateandTime.setText(date+" "+time);
+//        }
+//    }
+
+
+    //----------------------------------------- End of static classes -------------------------------------------------------------
+
+    public void TimePickerDialogue(){
+
+        final Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        TimePickerDialog timePickDialogue = TimePickerDialog.newInstance(ReservationFragment.this,hour,minute,true);
+
+//            timePickDialogue.setMinTime(24,00,0);
+//            timePickDialogue.setMaxTime(12,59,0);
+
+        Timepoint tp1 = new Timepoint(12,00,00);
+        Timepoint tp1a = new Timepoint(12,15,00);
+        Timepoint tp1b = new Timepoint(12,30,00);
+        Timepoint tp1c = new Timepoint(12,45,00);
+        Timepoint tp2 = new Timepoint(13,00,00);
+        Timepoint tp2a = new Timepoint(13,15,00);
+        Timepoint tp2b = new Timepoint(13,30,00);
+        Timepoint tp2c = new Timepoint(13,45,00);
+        Timepoint tp3 = new Timepoint(14,00,00);
+        Timepoint tp3a = new Timepoint(14,15,00);
+        Timepoint tp3b = new Timepoint(14,30,00);
+        Timepoint tp3c = new Timepoint(14,45,00);
+        Timepoint tp4 = new Timepoint(15,00,00);
+        Timepoint tp4a = new Timepoint(15,15,00);
+        Timepoint tp4b = new Timepoint(15,30,00);
+        Timepoint tp4c = new Timepoint(15,45,00);
+        Timepoint tp5 = new Timepoint(16,00,00);
+        Timepoint tp5a = new Timepoint(16,15,00);
+        Timepoint tp5b = new Timepoint(16,30,00);
+        Timepoint tp5c = new Timepoint(16,45,00);
+        Timepoint tp6 = new Timepoint(17,00,00);
+        Timepoint tp6a = new Timepoint(17,15,00);
+        Timepoint tp6b = new Timepoint(17,30,00);
+        Timepoint tp6c = new Timepoint(17,45,00);
+        Timepoint tp7 = new Timepoint(18,00,00);
+        Timepoint tp7a = new Timepoint(18,15,00);
+        Timepoint tp7b = new Timepoint(18,30,00);
+        Timepoint tp7c = new Timepoint(18,45,00);
+        Timepoint tp8 = new Timepoint(19,00,00);
+        Timepoint tp8a = new Timepoint(19,15,00);
+        Timepoint tp8b = new Timepoint(19,30,00);
+        Timepoint tp8c = new Timepoint(19,45,00);
+        Timepoint tp9 = new Timepoint(20,00,00);
+        Timepoint tp9a = new Timepoint(20,15,00);
+        Timepoint tp9b = new Timepoint(20,30,00);
+        Timepoint tp9c = new Timepoint(20,45,00);
+        Timepoint tp10 = new Timepoint(21,00,00);
+        Timepoint tp10a = new Timepoint(21,15,00);
+        Timepoint tp10b = new Timepoint(21,30,00);
+        Timepoint tp10c = new Timepoint(21,45,00);
+        Timepoint tp11 = new Timepoint(22,00,00);
+        Timepoint tp11a = new Timepoint(22,15,00);
+        Timepoint tp11b = new Timepoint(22,30,00);
+        Timepoint tp11c = new Timepoint(22,45,00);
+        Timepoint tp12 = new Timepoint(23,00,00);
+        Timepoint tp12a = new Timepoint(23,15,00);
+        Timepoint tp12b = new Timepoint(23,30,00);
+        Timepoint tp12c = new Timepoint(23,45,00);
+        Timepoint tp13 = new Timepoint(00,00,00);
+        Timepoint tp13a = new Timepoint(00,15,00);
+        Timepoint tp13b = new Timepoint(00,30,00);
+        Timepoint tp13c = new Timepoint(00,45,00);
+        Timepoint tp13d = new Timepoint(01,00,00);
+
+        if(kbjBranch.equals("MAS") || kbjBranch.equals("CF")) {
+            Timepoint[] list = new Timepoint[]{tp1, tp1a, tp1b, tp1c, tp2, tp2a, tp2b, tp2c, tp3, tp3a, tp3b, tp3c,
+                    tp4, tp4a, tp4b, tp4c, tp5, tp5a, tp5b, tp5c, tp6, tp6a, tp6b, tp6c,
+                    tp7, tp7a, tp7b, tp7c, tp8, tp8a, tp8b, tp8c, tp9, tp9a, tp9b, tp9c,
+                    tp10, tp10a, tp10b, tp10c, tp11, tp11a, tp11b, tp11c, tp12, tp12a,
+                    tp12b, tp12c, tp13, tp13a, tp13b, tp13c, tp13d};
+            timePickDialogue.setSelectableTimes(list);
         }
 
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
-            if(getDateandTime.getText()!= null) {
+        else if(kbjBranch.equals("DD") || kbjBranch.equals("NN") || kbjBranch.equals("SM") || kbjBranch.equals("TR PECHS")){
 
-                time = hourOfDay + ":" + minute ;
-                getDateandTime.setText(date+" "+time);
-            }
+            Timepoint[] list = new Timepoint[]{
+                    tp7, tp7a, tp7b, tp7c, tp8, tp8a, tp8b, tp8c, tp9, tp9a, tp9b, tp9c,
+                    tp10, tp10a, tp10b, tp10c, tp11, tp11a, tp11b, tp11c, tp12, tp12a,
+                    tp12b, tp12c, tp13, tp13a, tp13b, tp13c, tp13d};
+            timePickDialogue.setSelectableTimes(list);
         }
+
+        timePickDialogue.show(getFragmentManager(),"TimePicker");
+
     }
 
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
+    public void DatePickerDialogue(){
+
+            Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
+        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(ReservationFragment.this, year, month, day);
+        datePickerDialog.show(getFragmentManager(),"DatePicker");
+
+    }
+
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+
+        if(time.equals("0:0") || time.equals("0:15") || time.equals("0:30") || time.equals("0:45") || time.equals("1:0")){
+            date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            Date dateGotten = null;
+            try {
+                dateGotten = format.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dateGotten);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            getDateandTime.setText(format.format(calendar.getTime()) + " " + time);;
+
+        }
+        else {
+
+            date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+            getDateandTime.setText(date + " " + time);
+
         }
 
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
-            date = day + "/" + (month + 1) + "/" + year ;
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+        if(getDateandTime.getText()!= null) {
+            time = hourOfDay + ":" + minute ;
             getDateandTime.setText(date+" "+time);
+            DatePickerDialogue();
         }
     }
+
+
 
     public long getDateTimeinUnix(){
 
@@ -221,18 +377,19 @@ public class ReservationFragment extends Fragment {
     }
 
 
-//----------------------------------------- End of static classes -------------------------------------------------------------
-
     private class BranchSelectListner implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
            // On selecting a spinner item
-            String item = parent.getItemAtPosition(position).toString();
+
+            branch =  spinnerBranch.getSelectedItem();
+            kbjBranch = ((Branches) branch).getCode();
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
 
+            Toast.makeText(getActivity(),"Please select the branch",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -241,8 +398,10 @@ public class ReservationFragment extends Fragment {
         public boolean onTouch(View v, MotionEvent event) {
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                new TimePickerFragment().show(getFragmentManager(),"TimePicker");
-                new DatePickerFragment().show(getFragmentManager(),"DatePicker");
+
+                TimePickerDialogue();
+//                new TimePickerFragment().show(getFragmentManager(),"TimePicker");
+//                new DatePickerFragment().show(getFragmentManager(),"DatePicker");
             }
             return false;
         }

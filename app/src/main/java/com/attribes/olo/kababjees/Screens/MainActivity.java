@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.widget.*;
 import com.attribes.olo.kababjees.Interfaces.*;
 import com.attribes.olo.kababjees.adapters.CategoryAdapter;
+import com.attribes.olo.kababjees.adapters.DrawerExpandableListAdapter;
 import com.attribes.olo.kababjees.cart.ItemCart;
 import com.attribes.olo.kababjees.fragments.*;
 import com.attribes.olo.kababjees.models.Category;
@@ -33,6 +35,7 @@ import com.attribes.olo.kababjees.network.NetworkChangeReceiver;
 import com.attribes.olo.kababjees.network.RestClient;
 import com.attribes.olo.kababjees.utils.Constants;
 import com.attribes.olo.kababjees.R;
+import com.attribes.olo.kababjees.utils.DrawerGroupItems;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
     private DrawerLayout mDrawerLayout;
     public static OnItemRemoveListener onItemRemoveListener = null;
     public static OnQuantityChangeListener onQuantityChangeListener = null;
-    private ListView mDrawerList;
+    private ExpandableListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;        // used to store app title
@@ -57,12 +60,16 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
     private TypedArray navMenuIcons;
     private Toolbar toolbar;
     private ArrayList<Category> navCategoryItems;
-    private CategoryAdapter categoryAdapter;
+//    private CategoryAdapter categoryAdapter;
+    private DrawerExpandableListAdapter expandableListAdapter;
     private ProgressDialog progressDialog;
     Category category;
     ImageView internetImage;
     ImageView wrongImage;
     Button reserve ;
+    ArrayList<DrawerGroupItems> drawerGroupItems;
+    ArrayList<String> categoryList;
+    ArrayList<Category> actualCategories;
 
     private static final String LOG_TAG = "CheckNetworkStatus";
    // private NetworkChangeReceiver receiver;
@@ -76,8 +83,6 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         NetworkChangeReceiver.getInstance().setConnectivityListener(this);
         init_views();
        // checkInternetConectivity();
-
-        mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
         getCategory();     //show category on Drawer
         setDraweropened();    //always open a drawer when activity is opened
@@ -126,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
             public void onDrawerOpened(View drawerView) {
                 getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu();  // calling onPrepareOptionsMenu() to hide action bar icons
-                mDrawerList.setAdapter(categoryAdapter);
+                mDrawerList.setAdapter(expandableListAdapter);
 
             }
         };
@@ -157,7 +162,8 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);    // nav drawer icons from resources
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+        mDrawerList = (ExpandableListView) findViewById(R.id.list_slidermenu);
+        mDrawerList.setOnChildClickListener(new ChildItemListner());
 
         LayoutInflater inflater = getLayoutInflater();
         View listHeaderView = inflater.inflate(R.layout.drawer_header,null, false);
@@ -184,24 +190,49 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
             public void success(ArrayList<Category> categories, Response response) {
                 //hideProgress();
                 categories.size();
-                categoryAdapter = new CategoryAdapter(getApplicationContext(), categories);
-                mDrawerList.setAdapter(categoryAdapter);
+
+                actualCategories = categories;
+
+                 categoryList = new ArrayList<String>();
+
+                for( Category groupCategoryItems : categories){
+
+                    categoryList.add(groupCategoryItems.getName());
+                }
+
+                makeDrawerList();
+               // categoryAdapter = new CategoryAdapter(getApplicationContext(), categories);
+               // mDrawerList.setAdapter(categoryAdapter);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
                 Toast.makeText(getApplicationContext(), Constants.Server_Error, Toast.LENGTH_SHORT).show();
-
-                //hideProgress();
-//                mDrawerList.setVisibility(View.GONE);
-//                internetImage.setVisibility(View.GONE);
-//                wrongImage.setVisibility(View.VISIBLE);
-//                mDrawerLayout.closeDrawer(mDrawerList);
-
             }
         });
     }
 
+    private void makeDrawerList(){
+
+        drawerGroupItems= new ArrayList<DrawerGroupItems>();
+
+        ArrayList<String> childListOrder= new ArrayList<String>();
+        childListOrder.add("Online Order");
+        childListOrder.add("My reservations");
+        DrawerGroupItems drawerGroupOrder = new DrawerGroupItems("My Order",childListOrder,null);
+        drawerGroupItems.add(drawerGroupOrder);
+
+        ArrayList<String> childListReservation= new ArrayList<String>();
+        childListReservation.add("Make Reservation");
+        DrawerGroupItems drawerGroupReservation = new DrawerGroupItems("Reservation",childListReservation,null);
+        drawerGroupItems.add(drawerGroupReservation);
+
+        DrawerGroupItems drawerGroupMenu = new DrawerGroupItems("Menu",categoryList,null);
+        drawerGroupItems.add(drawerGroupMenu);
+
+        expandableListAdapter = new DrawerExpandableListAdapter(MainActivity.this,drawerGroupItems);
+        mDrawerList.setAdapter(expandableListAdapter);
+    }
 
 
     private void showProgress(String message) {
@@ -352,17 +383,17 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
     //====================================End of Local Interface overriden methods ====================================//
 
-    private class SlideMenuClickListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            category= (Category) parent.getItemAtPosition(position);
-            send_CategoryId(category.getId());
-            mDrawerLayout.closeDrawer(mDrawerList);
-            getSupportActionBar().setTitle(category.getName());
-
-        }
-    }
+//    private class SlideMenuClickListener implements AdapterView.OnItemClickListener {
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            category= (Category) parent.getItemAtPosition(position);
+//            send_CategoryId(category.getId());
+//            mDrawerLayout.closeDrawer(mDrawerList);
+//            getSupportActionBar().setTitle(category.getName());
+//
+//        }
+//    }
     private void  send_CategoryId(int cat_id)
     {
         Bundle bundle=new Bundle();
@@ -453,18 +484,34 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         NetworkChangeReceiver.getInstance().setConnectivityListener(this);
     }
 
-    private class ReserveListner implements View.OnClickListener {
+
+    private class ChildItemListner implements ExpandableListView.OnChildClickListener {
         @Override
-        public void onClick(View v) {
+        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
-            FrameLayout frameLayout = (FrameLayout)findViewById(R.id.frame_container) ;
-            frameLayout.setBackgroundResource(0);
+          //  final String selected = (String) expandableListAdapter.getChild(groupPosition, childPosition);
 
-            ReservationFragment reservefragment = new  ReservationFragment();
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_container, reservefragment).commit();
+            if(groupPosition == 1){
+                if(childPosition == 0){
+                    FrameLayout frameLayout = (FrameLayout)findViewById(R.id.frame_container) ;
+                    frameLayout.setBackgroundResource(0);
 
-            reserve.setVisibility(View.GONE);
+                    ReservationFragment reservefragment = new  ReservationFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.frame_container, reservefragment).commit();
+                }
+            }
+
+//            category= (Category) parent.getItemAtPosition(childPosition);
+            if(groupPosition == 2) {
+                category = actualCategories.get(childPosition);
+                send_CategoryId(category.getId());
+                mDrawerLayout.closeDrawer(mDrawerList);
+                getSupportActionBar().setTitle(category.getName());
+            }
+
+                return true;
+
         }
     }
 }

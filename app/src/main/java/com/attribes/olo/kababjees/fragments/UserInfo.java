@@ -26,10 +26,12 @@ import com.attribes.olo.kababjees.utils.Constants;
 
 import com.attribes.olo.kababjees.R;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -312,6 +314,14 @@ public class UserInfo extends Fragment {
                     }
 
                     Orders placeorders = new Orders(userName, userPhone, userAddress, ordertotal, orderTime, platform_os, orderdetail);
+                    ArrayList<Orders> ordersLogList = new ArrayList<>();
+                    ordersLogList.add(placeorders);
+                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                    Gson gson = new Gson();
+                    String jsonOnlineOrders = gson.toJson(ordersLogList); //  - instance of MyObject
+                    prefsEditor.putString("OnlineOrders", jsonOnlineOrders);
+                    prefsEditor.commit();
+
                     showProgress("Loading.....");
                     RestClient.getAdapter().placeOrder(placeorders, new Callback<OrderResponse>() {
                         @Override

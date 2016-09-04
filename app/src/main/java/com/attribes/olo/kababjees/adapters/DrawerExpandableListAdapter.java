@@ -87,26 +87,13 @@ public class DrawerExpandableListAdapter extends BaseExpandableListAdapter {
         }
         ((CheckedTextView) convertView).setText(drawerGroupItemsList.get(groupPosition).getGroupName());
         ((CheckedTextView) convertView).setChecked(isExpanded);
+
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        if(getChild(groupPosition,childPosition) instanceof String){
-
-
-            //case where normal string is coming
-            //implement functionality of normal string headers of menu here
-        }
-
-
-        else{
-
-
-            //this is a category object
-            //extract category id and pass it on click listener
-        }
         TextView textChild = null;
 
         if (convertView == null) {

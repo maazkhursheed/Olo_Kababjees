@@ -15,6 +15,7 @@ import android.os.Bundle;
 //import android.app.TimePickerDialog;
 import android.os.StrictMode;
 import android.text.format.DateFormat;
+import android.text.method.KeyListener;
 import android.view.*;
 import android.widget.*;
 import com.attribes.olo.kababjees.R;
@@ -49,6 +50,7 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
     private EditText getName, getEmail, getPhone, getPersonsCount;
     Spinner spinnerBranch;
     private Button submit;
+    private TextView clearDatenTime;
     static String date;
     static String time;
     static String dateTime;
@@ -57,6 +59,7 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
 
     Object branch;
     String kbjBranch;
+    KeyListener mKeyListener ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +79,20 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
 
     }
 
+    private void disable_enableEditTextListner() {
+
+        if(kbjBranch !="MAS" || kbjBranch != "CF" || kbjBranch != "DD" || kbjBranch != "NN" ||
+                kbjBranch != "SM" || kbjBranch != "TR PECHS" ) {
+            mKeyListener = getDateandTime.getKeyListener();
+            getDateandTime.setKeyListener(null);
+            getDateandTime.setError("Select the branch first");
+            Toast.makeText(getActivity(),"Select the branch first",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            getDateandTime.setKeyListener(mKeyListener);
+        }
+    }
+
     private void initViews(View view) {
 
         getActivity().setTitle("Reserve your seat");
@@ -84,11 +101,14 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
         getEmail = (EditText) view.findViewById(R.id.edt_mail);
         getPhone = (EditText) view.findViewById(R.id.edt_phone);
         getPersonsCount = (EditText) view.findViewById(R.id.edt_person_count);
+        clearDatenTime = (TextView) view.findViewById(R.id.clearTv);
+        clearDatenTime.setOnClickListener(new ClearDateTimeListner());
         spinnerBranch = (Spinner) view.findViewById(R.id.spinnerBranch);
         getBranches();
 
-        getDateandTime.setOnTouchListener(new DateTimePickListner());
         spinnerBranch.setOnItemSelectedListener(new BranchSelectListner());
+        getDateandTime.setOnTouchListener(new DateTimePickListner());
+        //disable_enableEditTextListner();
 
         submit = (Button) view.findViewById(R.id.btnSubmit);
         submit.setOnClickListener(new ReservationListner());
@@ -99,10 +119,14 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
         @Override
         public void onClick(View v) {
 
+            Matcher matcherObj = Pattern.compile(EMAIL_PATTERN).matcher(getEmail.getText().toString());
+
             if(getDateandTime.getText().toString().isEmpty()||getName.getText().toString().isEmpty()||
-                    getEmail.getText().toString().isEmpty()&& android.util.Patterns.EMAIL_ADDRESS.matcher(getEmail.getText().toString()).matches()||
+                    getEmail.getText().toString().isEmpty()&& matcherObj.matches()||
                     getPhone.getText().toString().isEmpty()|| getPersonsCount.getText().toString().isEmpty()||
                     spinnerBranch.getId()==0) {
+
+                getEmail.setError("Incorrect email");
 
                 Toast.makeText(getActivity().getApplicationContext(),"Fields are missing or incorrect",Toast.LENGTH_SHORT).show();
             }
@@ -399,11 +423,17 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
 
-                TimePickerDialogue();
+                if(kbjBranch.equals("MAS") || kbjBranch.equals("CF") || kbjBranch.equals("DD") ||
+                        kbjBranch.equals("NN") || kbjBranch.equals("SM") || kbjBranch.equals("TR PECHS")){
+                    TimePickerDialogue();
+                }
+                else{
+                    Toast.makeText(getActivity(),"Select the branch first",Toast.LENGTH_SHORT).show();
+                }
 //                new TimePickerFragment().show(getFragmentManager(),"TimePicker");
 //                new DatePickerFragment().show(getFragmentManager(),"DatePicker");
             }
-            return false;
+            return true;
         }
     }
 
@@ -428,5 +458,12 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    private class ClearDateTimeListner implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            getDateandTime.setText("");
+        }
     }
 }

@@ -111,7 +111,9 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
         getCategory();
     }
 
-    public void setDraweropened() { mDrawerLayout.openDrawer(mDrawerList); }
+    public void setDraweropened() {
+        mDrawerLayout.openDrawer(mDrawerList);
+    }
 
     public void setDrawerclosed(){
         mDrawerLayout.closeDrawer(mDrawerList);
@@ -132,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
                 getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu();  // calling onPrepareOptionsMenu() to hide action bar icons
                 mDrawerList.setAdapter(expandableListAdapter);
-
+                makeListExpanded();
             }
         };
 
@@ -232,8 +234,17 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
         expandableListAdapter = new DrawerExpandableListAdapter(MainActivity.this,drawerGroupItems);
         mDrawerList.setAdapter(expandableListAdapter);
+
+        makeListExpanded();
+
     }
 
+    private void makeListExpanded() {
+        int count = expandableListAdapter.getGroupCount();
+        for (int position = 1; position <= count; position++) {
+            mDrawerList.expandGroup(position - 1);
+        }
+    }
 
     private void showProgress(String message) {
         progressDialog=ProgressDialog.show(this,"",message,false);
@@ -491,6 +502,18 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
           //  final String selected = (String) expandableListAdapter.getChild(groupPosition, childPosition);
 
+            if(groupPosition == 0){
+                if(childPosition == 0){
+                    FrameLayout frameLayout = (FrameLayout)findViewById(R.id.frame_container) ;
+                    frameLayout.setBackgroundResource(0);
+
+                    OnlineOrdersViewFragment onlineOrdersViewFragment = new OnlineOrdersViewFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.frame_container, onlineOrdersViewFragment).commit();
+                    setDrawerclosed();
+                }
+            }
+
             if(groupPosition == 1){
                 if(childPosition == 0){
                     FrameLayout frameLayout = (FrameLayout)findViewById(R.id.frame_container) ;
@@ -499,6 +522,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
                     ReservationFragment reservefragment = new  ReservationFragment();
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.frame_container, reservefragment).commit();
+                    setDrawerclosed();
                 }
             }
 
@@ -506,7 +530,7 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
             if(groupPosition == 2) {
                 category = actualCategories.get(childPosition);
                 send_CategoryId(category.getId());
-                mDrawerLayout.closeDrawer(mDrawerList);
+                setDrawerclosed();
                 getSupportActionBar().setTitle(category.getName());
             }
 
@@ -514,4 +538,5 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
         }
     }
+
 }

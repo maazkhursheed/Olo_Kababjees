@@ -7,7 +7,7 @@
 
 
     <TextView
-            android:id="@+id/groupChild"
+            android:id="@+id/orderLogChild"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Online"

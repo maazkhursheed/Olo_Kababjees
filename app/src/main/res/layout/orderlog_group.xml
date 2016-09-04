@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
                  xmlns:tools="http://schemas.android.com/tools"
-                 android:id="@+id/textViewgroupHeader"
+                 android:id="@+id/tvOrderLogHeader"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:gravity="start"
                  android:padding="10dp"
-                 android:text="My Orders"
+                 android:text="Order 1"
                  android:textSize="22sp"
                  android:textAlignment="textStart"
                  android:background="#E8E8E8"

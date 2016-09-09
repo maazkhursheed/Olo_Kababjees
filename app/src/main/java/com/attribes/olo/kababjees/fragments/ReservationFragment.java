@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 //import android.app.DatePickerDialog;
 //import android.app.Dialog;
@@ -26,6 +28,8 @@ import com.attribes.olo.kababjees.models.Branches;
 import com.attribes.olo.kababjees.models.OrderResponse;
 import com.attribes.olo.kababjees.models.Reservation;
 import com.attribes.olo.kababjees.network.RestClient;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -38,6 +42,8 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Maaz on 8/24/2016.
@@ -56,10 +62,14 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
     static String dateTime;
     String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
+    ArrayList<Reservation> reservationLogList;
+    Gson gson;
+    String jsonOnlineReservations;
     Object branch;
     String kbjBranch;
+    int branchId;
     KeyListener mKeyListener ;
+    SharedPreferences mPrefs ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +84,19 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
         }
 
         initViews(view);
+
+//        mPrefs =getActivity().getPreferences(MODE_PRIVATE);
+        mPrefs = getActivity().getSharedPreferences("Reservation_Pref", MODE_PRIVATE);
+        reservationLogList = new ArrayList<>();
+        gson = new Gson();
+        String jsonReservations = mPrefs.getString("ReservationLogList",null);
+
+        if(jsonReservations != null){
+            Type type = new TypeToken<ArrayList<Reservation>>(){}.getType();
+            ArrayList<Reservation> reservationObtainedList = gson.fromJson(jsonReservations, type);
+            reservationLogList = reservationObtainedList ;
+        }
+
         setHasOptionsMenu(true);
         return view;
 
@@ -122,13 +145,18 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
             Matcher matcherObj = Pattern.compile(EMAIL_PATTERN).matcher(getEmail.getText().toString());
 
             if(getDateandTime.getText().toString().isEmpty()||getName.getText().toString().isEmpty()||
-                    getEmail.getText().toString().isEmpty()&& matcherObj.matches()||
-                    getPhone.getText().toString().isEmpty()|| getPersonsCount.getText().toString().isEmpty()||
-                    spinnerBranch.getId()==0) {
-
-                getEmail.setError("Incorrect email");
+                    getEmail.getText().toString().isEmpty()|| getPhone.getText().toString().isEmpty()||
+                    getPersonsCount.getText().toString().isEmpty() || branchId == 0) {
 
                 Toast.makeText(getActivity().getApplicationContext(),"Fields are missing or incorrect",Toast.LENGTH_SHORT).show();
+            }
+
+            else if(!matcherObj.matches()){
+                getEmail.setError("Incorrect Email");
+            }
+            else if(getPersonsCount.getText().toString().equals("0") ){
+
+                getPersonsCount.setError("Person count can't be zero");
             }
 
             else {
@@ -138,9 +166,17 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
                 String email = getEmail.getText().toString();
                 String personContact = getPhone.getText().toString();
                 int personCount = Integer.parseInt(getPersonsCount.getText().toString());
-                int branchID = spinnerBranch.getId();
+                int branchID = branchId;
+//                branch =  spinnerBranch.getSelectedItem();
+//                int branchID = Integer.valueOf(((Branches) branch).getCode());
 
                 Reservation reservation = new Reservation(time, personCount, personContact, name, branchID, email);
+
+                reservationLogList.add(reservation);
+                SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                jsonOnlineReservations = gson.toJson(reservationLogList);
+                prefsEditor.putString("ReservationLogList", jsonOnlineReservations);
+                prefsEditor.commit();
 
                 showProgress(" Submitting .....");
                 RestClient.getAdapter().placeReservation(reservation, new Callback<OrderResponse>() {
@@ -162,7 +198,6 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
         }
     }
 
-
     private void getBranches() {
 
         showProgress("Getting Branches ...");
@@ -172,8 +207,8 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
             public void success(ArrayList<Branches> branches, Response response) {
 
                 hideProgress();
+                Collections.reverse(branches);
                 BranchAdapter branchAdapter = new BranchAdapter(getActivity(),branches,"Select the branch :");
-                spinnerBranch.setPrompt("Select the branch");
                 spinnerBranch.setAdapter(branchAdapter);
             }
 
@@ -183,6 +218,7 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
             }
         });
     }
+
 
     private void showProgress(String message){
         progressDialog= ProgressDialog.show(getActivity(),"",message,false);
@@ -340,7 +376,9 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
+        c.set(year,month,day+2);
         DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(ReservationFragment.this, year, month, day);
+        datePickerDialog.setMinDate(c);
         datePickerDialog.show(getFragmentManager(),"DatePicker");
 
     }
@@ -348,6 +386,8 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+
+        final Calendar calendar = Calendar.getInstance();
 
         if(time.equals("0:0") || time.equals("0:15") || time.equals("0:30") || time.equals("0:45") || time.equals("1:0")){
             date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
@@ -358,10 +398,11 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            final Calendar calendar = Calendar.getInstance();
+            //final Calendar calendar = Calendar.getInstance();
             calendar.setTime(dateGotten);
             calendar.add(Calendar.DAY_OF_YEAR, 1);
-            getDateandTime.setText(format.format(calendar.getTime()) + " " + time);;
+
+            getDateandTime.setText(format.format(calendar.getTime()) + " " + time);
 
         }
         else {
@@ -408,6 +449,7 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
 
             branch =  spinnerBranch.getSelectedItem();
             kbjBranch = ((Branches) branch).getCode();
+            branchId = ((Branches) branch).getId();
         }
 
         @Override

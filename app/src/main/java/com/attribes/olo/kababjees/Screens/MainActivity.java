@@ -241,8 +241,13 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
 
     private void makeListExpanded() {
         int count = expandableListAdapter.getGroupCount();
-        for (int position = 1; position <= count; position++) {
-            mDrawerList.expandGroup(position - 1);
+        if(count != 0) {
+            for (int position = 1; position <= count; position++) {
+                mDrawerList.expandGroup(position - 1);
+            }
+        }
+        else{
+            Toast.makeText(MainActivity.this,"Items are not available",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -510,6 +515,19 @@ public class MainActivity extends AppCompatActivity implements DetailsFragment.O
                     OnlineOrdersViewFragment onlineOrdersViewFragment = new OnlineOrdersViewFragment();
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.frame_container, onlineOrdersViewFragment).commit();
+                    setDrawerclosed();
+                }
+            }
+
+
+            if(groupPosition == 0){
+                if(childPosition == 1){
+                    FrameLayout frameLayout = (FrameLayout)findViewById(R.id.frame_container) ;
+                    frameLayout.setBackgroundResource(0);
+
+                    OnlineReservationsViewFragment onlineReservationsViewFragment = new OnlineReservationsViewFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.frame_container, onlineReservationsViewFragment).commit();
                     setDrawerclosed();
                 }
             }

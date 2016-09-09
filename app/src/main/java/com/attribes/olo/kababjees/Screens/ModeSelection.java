@@ -51,7 +51,6 @@ public class ModeSelection extends AppCompatActivity {
         orderNowBtn = (Button) findViewById(R.id.orderOnline);
         reservationBtn  = (Button) findViewById(R.id.reservationPanel);
 
-
         orderNowBtn.setOnClickListener(new OrderOnlineListner());
         reservationBtn.setOnClickListener(new ReservationListner());
     }

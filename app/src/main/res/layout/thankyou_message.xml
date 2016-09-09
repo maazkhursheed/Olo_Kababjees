@@ -8,8 +8,8 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thank You, your order has been placed!"
-
+            android:text="Thank You, your order has been placed!
+                          Kababjees will soon contact you for confirmation"
             android:textSize="25dp"
             android:textStyle="bold"
             android:layout_margin="15dp"

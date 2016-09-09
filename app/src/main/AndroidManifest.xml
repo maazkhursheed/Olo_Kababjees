@@ -15,7 +15,8 @@
             android:label="@string/app_name"
             android:largeHeap="true"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme1">
+            android:theme="@style/AppTheme1"
+            android:name=".Screens.MainApp" >
         <activity
                 android:name=".Screens.SplashScreen"
                 android:screenOrientation="portrait"

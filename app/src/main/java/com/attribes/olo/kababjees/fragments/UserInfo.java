@@ -32,8 +32,10 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -55,7 +57,7 @@ public class UserInfo extends Fragment {
     private ProgressDialog progressDialog;
     SharedPreferences mPrefs ;
     private OnDrawerEnableDisable enableDisableDrawer;
-
+    private ArrayList<Orders> logOrdersList;
     private android.support.v7.widget.Toolbar toolbar;
 
 
@@ -77,6 +79,19 @@ public class UserInfo extends Fragment {
         setHasOptionsMenu(true);
 
         initViews();
+
+        // on note pad
+        logOrdersList = new ArrayList<>();
+        Gson gson = new Gson();
+        String ordersJson = mPrefs.getString("OnlineOrdersList",null);
+
+        if(ordersJson != null){
+            Type type = new TypeToken<ArrayList<Orders>>(){}.getType();
+            ArrayList<Orders> ordersObtainedList = gson.fromJson(ordersJson, type);
+            logOrdersList = ordersObtainedList ;
+        }
+
+
         return view;
 
     }
@@ -150,6 +165,7 @@ public class UserInfo extends Fragment {
      */
     private void initViews(){
 
+        mPrefs = getActivity().getPreferences(MODE_PRIVATE);
 
         userinfo_linear= (LinearLayout) view.findViewById(R.id.user_info_mainlayout);
         thankyou= (FrameLayout) view.findViewById(R.id.fragment_order_thankyouFrame);
@@ -160,7 +176,6 @@ public class UserInfo extends Fragment {
         button_confirm= (Button) view.findViewById(R.id.confirm_btn);
 
 
-        mPrefs =getActivity().getPreferences(MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("User",null);
         User obj = gson.fromJson(json, User.class);
@@ -177,10 +192,6 @@ public class UserInfo extends Fragment {
 
 
         }
-
-
-
-
 
     }
 
@@ -272,17 +283,8 @@ public class UserInfo extends Fragment {
     private class ConfirmOrderListner implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            //mListner.showDrawerToggle(false);
-//            if(NetworkChangeReceiver.getInstance().isNetworkAvailable(getActivity().getApplicationContext()))
-//            {
+
                 placeOrders();
-
-//            }
-//            else {
-//                Toast.makeText(getActivity().getApplicationContext(), Constants.No_Internet_Connection,Toast.LENGTH_LONG).show();
-//            }
-           // hideFragment();
-
         }
 
 
@@ -291,13 +293,11 @@ public class UserInfo extends Fragment {
         private void placeOrders(){
             if(validateInput()==true) {
 
-//                DevicePreference.getInstance().initPref(getActivity().getApplicationContext());
-//                DevicePreference.getInstance().setAuthHeaderFlag(true);
-                // showProgress("Loading.....");
-              //  if (NetworkChangeReceiver.getInstance().isNetworkAvailable(getActivity().getApplicationContext())) {
-
                     double ordertotal = ItemCart.getInstance().getTotal();
-                    int orderTime = 462970960;
+
+                     Date date= new Date();
+                    //getTime() returns current time in milliseconds
+                    long orderTime = date.getTime();                                    //System.currentTimeMillis();
                     List<MenusItem> itemsList = ItemCart.getOrderableItems();
                     ArrayList<order_detail> orderdetail = new ArrayList<>();
 
@@ -309,17 +309,16 @@ public class UserInfo extends Fragment {
                         double price = item.getPrice();
 
                         order_detail detail = new order_detail(id, itemname, desiredQuantity, price);
-                        //order_detail detail = new order_detail(1,"Tikka",3,400);
                         orderdetail.add(detail);
                     }
 
                     Orders placeorders = new Orders(userName, userPhone, userAddress, ordertotal, orderTime, platform_os, orderdetail);
-                    ArrayList<Orders> ordersLogList = new ArrayList<>();
-                    ordersLogList.add(placeorders);
+
+                    logOrdersList.add(placeorders);
                     SharedPreferences.Editor prefsEditor = mPrefs.edit();
                     Gson gson = new Gson();
-                    String jsonOnlineOrders = gson.toJson(ordersLogList); //  - instance of MyObject
-                    prefsEditor.putString("OnlineOrders", jsonOnlineOrders);
+                    String jsonOnlineOrders = gson.toJson(logOrdersList); //  - instance of MyObject
+                    prefsEditor.putString("OnlineOrdersList", jsonOnlineOrders);
                     prefsEditor.commit();
 
                     showProgress("Loading.....");
@@ -343,20 +342,9 @@ public class UserInfo extends Fragment {
                         }
                     });
 
-
                 }
-//                else {
-//
-////                exception here
-//                }
-//            }
-//            else {
-//                Toast.makeText(getActivity().getApplicationContext(), Constants.No_Internet_Connection,Toast.LENGTH_LONG).show();
-//
-//
-//            }
+
         }
     }
-
 
 }

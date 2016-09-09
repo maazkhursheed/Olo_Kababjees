@@ -13,7 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="bottom"
+            android:background="@drawable/kbj_pehla">
 
 
         <Button android:id="@+id/orderOnline"
@@ -23,19 +24,23 @@
                 android:textSize="20sp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="70dp"
                 android:background="@color/greeen_color"
-                android:textColor="@color/white_text_color"/>
+                android:textColor="@color/white_text_color"
+                android:layout_marginBottom="10dp"
+                android:alpha="0.8"/>
 
         <Button android:id="@+id/reservationPanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Reserve your seat"
-                android:layout_marginTop="70dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/greeen_color"
                 android:textColor="@color/white_text_color"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:layout_marginBottom="25dp"
+                android:alpha="0.8"/>
 
 
     </LinearLayout>

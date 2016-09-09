@@ -11,7 +11,11 @@ import com.attribes.olo.kababjees.R;
 import com.attribes.olo.kababjees.models.Orders;
 import com.attribes.olo.kababjees.models.order_detail;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by Maaz on 9/4/2016.
@@ -70,7 +74,7 @@ public class OnlineOrdersLogAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.orderlog_group, null);
         }
 
-        ((CheckedTextView) convertView).setText("Order Total: " + ordersList.get(groupPosition).getOrder_total()+" "+ "Time: " + ordersList.get(groupPosition).getOrder_time() );
+        ((CheckedTextView) convertView).setText("Order Total: " + ordersList.get(groupPosition).getOrder_total()+ "\n" + "Time: " + unixToSimpleDateTime(ordersList.get(groupPosition).getOrder_time()) );
         ((CheckedTextView) convertView).setChecked(isExpanded);
         return convertView;
     }
@@ -83,7 +87,7 @@ public class OnlineOrdersLogAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.orderlog_item, null);
         }
         text = (TextView) convertView.findViewById(R.id.orderLogChild);
-        text.setText(itemsOfOrder.getItem_name()+"  ->  "+itemsOfOrder.getQuantity());
+        text.setText("Item Name: "+itemsOfOrder.getItem_name()+"    "+" Qty: "+itemsOfOrder.getQuantity());
 
         return convertView;
     }
@@ -91,5 +95,13 @@ public class OnlineOrdersLogAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
+    }
+
+    public String unixToSimpleDateTime(Long obtainedUnixDateTime){
+
+        Timestamp timeStamp = new Timestamp(obtainedUnixDateTime);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        String formattedTimeStamp = sdf.format(timeStamp);
+        return formattedTimeStamp;                                             //String.valueOf(formattedTimeStamp);
     }
 }

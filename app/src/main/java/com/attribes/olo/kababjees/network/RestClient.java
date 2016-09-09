@@ -32,11 +32,8 @@ public class RestClient {
 
                 request.addHeader("Content-Type","application/json");
                 request.addHeader("Accept","application/json");
-                request.addHeader("Authorization","e6b4777d-7edd-4622-aba7-a7b2c12b4630");
-//                request.addHeader("Authorization","d6e8a59c-9518-4998-a12a-9c97e50cebcb");
-                                                  // d6e8a59c-9518-4998-a12a-9c97e50cebcb
-              //  request.addHeader("Authorization", DevicePreference.getInstance().getHeader());
-
+                request.addHeader("Authorization","042e96b6-31cb-4746-b139-3d3e70bdf137");      // for production
+//              request.addHeader("Authorization","e6b4777d-7edd-4622-aba7-a7b2c12b4630");    // for stage
 
             }
         };

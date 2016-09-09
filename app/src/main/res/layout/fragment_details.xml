@@ -57,9 +57,9 @@
                     android:id="@+id/itemFullView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/header"/>
+            <!--android:background="@drawable/kbj"-->
 
-            />
-            <!--android:src="@drawable/piza"-->
         </FrameLayout>
         <!-- item short_desc and item_price  layout-->
         <LinearLayout

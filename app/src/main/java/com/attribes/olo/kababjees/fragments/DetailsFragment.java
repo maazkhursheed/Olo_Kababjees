@@ -94,7 +94,7 @@ public class DetailsFragment extends Fragment {
         }
 
         itemView = (ImageView) view.findViewById(R.id.itemFullView);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar1);
+        //progressBar = (ProgressBar) view.findViewById(R.id.progressBar1);
         button_addCart = (Button) view.findViewById(R.id.addcart_btn);
         label_itemName = (TextView) view.findViewById(R.id.textView_itemname);
         label_itemPrice = (TextView) view.findViewById(R.id.textView_itemPrice);
@@ -135,7 +135,7 @@ public class DetailsFragment extends Fragment {
         //totalprice = (calcTotalPrice(checkItemQuantity(), itemPrice));
 
         menusItem.setDesiredQuantity(selectedItemQuantity);
-        showImage();
+      //  showImage();
 
 
         //setHomeButton();

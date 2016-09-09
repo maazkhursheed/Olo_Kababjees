@@ -12,12 +12,12 @@ public class Orders implements Serializable {
     private String phone;
     private String address;
     private double order_total;
-    private int order_time;
+    private long order_time;
     private int device_os;
     private ArrayList<order_detail> order_detail;
 
     public Orders(String userName, String userPhone,
-                  String userAddress, double ordertotal, int order_time, int device_os, ArrayList<order_detail> order_detail) {
+                  String userAddress, double ordertotal, long order_time, int device_os, ArrayList<order_detail> order_detail) {
 
 
         this.name=userName;
@@ -61,11 +61,11 @@ public class Orders implements Serializable {
         this.order_total = order_total;
     }
 
-    public int getOrder_time() {
+    public long getOrder_time() {
         return order_time;
     }
 
-    public void setOrder_time(int order_time) {
+    public void setOrder_time(long order_time) {
         this.order_time = order_time;
     }
 

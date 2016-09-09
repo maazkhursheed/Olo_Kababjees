@@ -29,13 +29,11 @@ public class OnlineOrdersViewFragment extends Fragment {
     private View view;
     private ExpandableListView expandableOrdersList;
     private FrameLayout no_orderLayout;
-    SharedPreferences mPrefs ;
-    ArrayList<Orders> ordersList;
+    OnlineOrdersLogAdapter onlineOrdersAdapter;
+    ArrayList<Orders> obtainedOrdersList;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view =inflater.inflate(R.layout.fragment_online_orders_list, container, false);
 
@@ -52,33 +50,43 @@ public class OnlineOrdersViewFragment extends Fragment {
 
     }
 
-    private void prepareOrdersList() {
-        mPrefs =getActivity().getPreferences(MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = mPrefs.getString("OnlineOrders",null);
-//        Orders objOrder = gson.fromJson(json, Orders.class);
-
-        Type listOfObjects = new TypeToken<ArrayList<Orders>>(){}.getType();
-        ArrayList<Orders> obtainedList = gson.fromJson(json, listOfObjects);
-
-        if(obtainedList == null){
-            expandableOrdersList.setVisibility(View.GONE);
-            no_orderLayout.setVisibility(View.VISIBLE);
-        }
-        else {
-//            ordersList = new ArrayList<>();
-//            ordersList.add(objOrder);
-            OnlineOrdersLogAdapter onlineOrdersAdapter = new OnlineOrdersLogAdapter(getActivity(), obtainedList);
-            expandableOrdersList.setAdapter(onlineOrdersAdapter);
-        }
-    }
-
     private void intViews(View view) {
 
         expandableOrdersList = (ExpandableListView) view.findViewById(R.id.expOrderLogList);
         no_orderLayout = (FrameLayout) view.findViewById(R.id.noOrderLayout);
     }
 
+    private void prepareOrdersList() {
 
+        SharedPreferences mPrefs = getActivity().getPreferences(MODE_PRIVATE);
+        obtainedOrdersList = new ArrayList<>();
+        Gson gson = new Gson();
+        String jsonOrders = mPrefs.getString("OnlineOrdersList",null);
+
+        if(jsonOrders != null){
+            Type type = new TypeToken<ArrayList<Orders>>(){}.getType();
+            ArrayList<Orders> ordersObtainedList = gson.fromJson(jsonOrders, type);
+            obtainedOrdersList = ordersObtainedList;
+        }
+
+        if(obtainedOrdersList.isEmpty() ){
+            expandableOrdersList.setVisibility(View.GONE);
+            no_orderLayout.setVisibility(View.VISIBLE);
+        }
+        else {
+
+            onlineOrdersAdapter = new OnlineOrdersLogAdapter(getActivity(), obtainedOrdersList);
+            expandableOrdersList.setAdapter(onlineOrdersAdapter);
+//            makeListExpanded();
+        }
+    }
+
+
+    private void makeListExpanded() {
+        int count = onlineOrdersAdapter.getGroupCount();
+        for (int position = 1; position <= count; position++) {
+            expandableOrdersList.expandGroup(position - 1);
+        }
+    }
 
 }

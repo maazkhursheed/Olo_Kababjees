@@ -1,9 +1,11 @@
 package com.attribes.olo.kababjees.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Maaz on 8/24/2016.
  */
-public class Reservation {
+public class Reservation implements Serializable {
 
     public Reservation(long time, int no_of_person, String phone, String name, int branch_id, String email) {
         this.time = time;

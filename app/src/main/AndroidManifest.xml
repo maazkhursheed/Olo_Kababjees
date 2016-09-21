@@ -47,7 +47,8 @@
         <activity
                 android:name=".Screens.ModeSelection"
                 android:label="@string/title_activity_mode_selection"
-                android:theme="@style/AppTheme1">
+                android:theme="@style/AppTheme1"
+                android:screenOrientation="portrait">
         </activity>
     </application>
 

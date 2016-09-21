@@ -37,7 +37,7 @@ public class NetworkChangeReceiver  extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.v(LOG_TAG, "Receieved notification about com.example.maaz.olo.screens.network status");
+
         boolean networkAvailable = isNetworkAvailable(context);
 
         if(networkAvailable == true){

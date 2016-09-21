@@ -344,14 +344,14 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
         Timepoint tp13a = new Timepoint(00,15,00);
         Timepoint tp13b = new Timepoint(00,30,00);
         Timepoint tp13c = new Timepoint(00,45,00);
-        Timepoint tp13d = new Timepoint(01,00,00);
+        //Timepoint tp13d = new Timepoint(01,00,00);
 
         if(kbjBranch.equals("MAS") || kbjBranch.equals("CF")) {
             Timepoint[] list = new Timepoint[]{tp1, tp1a, tp1b, tp1c, tp2, tp2a, tp2b, tp2c, tp3, tp3a, tp3b, tp3c,
                     tp4, tp4a, tp4b, tp4c, tp5, tp5a, tp5b, tp5c, tp6, tp6a, tp6b, tp6c,
                     tp7, tp7a, tp7b, tp7c, tp8, tp8a, tp8b, tp8c, tp9, tp9a, tp9b, tp9c,
                     tp10, tp10a, tp10b, tp10c, tp11, tp11a, tp11b, tp11c, tp12, tp12a,
-                    tp12b, tp12c, tp13, tp13a, tp13b, tp13c, tp13d};
+                    tp12b, tp12c, tp13, tp13a, tp13b, tp13c};
             timePickDialogue.setSelectableTimes(list);
         }
 
@@ -360,7 +360,7 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
             Timepoint[] list = new Timepoint[]{
                     tp7, tp7a, tp7b, tp7c, tp8, tp8a, tp8b, tp8c, tp9, tp9a, tp9b, tp9c,
                     tp10, tp10a, tp10b, tp10c, tp11, tp11a, tp11b, tp11c, tp12, tp12a,
-                    tp12b, tp12c, tp13, tp13a, tp13b, tp13c, tp13d};
+                    tp12b, tp12c, tp13, tp13a, tp13b, tp13c};
             timePickDialogue.setSelectableTimes(list);
         }
 
@@ -376,9 +376,15 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-        c.set(year,month,day+2);
+        c.set(year,month,day+1);
         DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(ReservationFragment.this, year, month, day);
         datePickerDialog.setMinDate(c);
+
+        // For disabling the weekends
+//        if(c.get(Calendar.DAY_OF_WEEK)== Calendar.SATURDAY || c.get(Calendar.DAY_OF_WEEK)== Calendar.SUNDAY ) {
+//            Calendar[] cal = new Calendar[]{};
+//            datePickerDialog.setDisabledDays(cal);
+//        }
         datePickerDialog.show(getFragmentManager(),"DatePicker");
 
     }

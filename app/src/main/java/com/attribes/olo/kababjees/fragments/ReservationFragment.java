@@ -167,23 +167,27 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
                 String personContact = getPhone.getText().toString();
                 int personCount = Integer.parseInt(getPersonsCount.getText().toString());
                 int branchID = branchId;
-//                branch =  spinnerBranch.getSelectedItem();
-//                int branchID = Integer.valueOf(((Branches) branch).getCode());
 
-                Reservation reservation = new Reservation(time, personCount, personContact, name, branchID, email);
+                if (personCount < 2) {
+                    getPersonsCount.setError("Reservation can be done for minimum of 2 persons");
+                }
 
-                reservationLogList.add(reservation);
-                SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                jsonOnlineReservations = gson.toJson(reservationLogList);
-                prefsEditor.putString("ReservationLogList", jsonOnlineReservations);
-                prefsEditor.commit();
+                else{
 
-                showProgress(" Submitting .....");
-                RestClient.getAdapter().placeReservation(reservation, new Callback<OrderResponse>() {
+                    Reservation reservation = new Reservation(time, personCount, personContact, name, branchID, email);
+
+                    reservationLogList.add(reservation);
+                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                    jsonOnlineReservations = gson.toJson(reservationLogList);
+                    prefsEditor.putString("ReservationLogList", jsonOnlineReservations);
+                    prefsEditor.commit();
+
+                    showProgress(" Submitting .....");
+                    RestClient.getAdapter().placeReservation(reservation, new Callback<OrderResponse>() {
                     @Override
                     public void success(OrderResponse orderResponse, Response response) {
                         hideProgress();
-                        Toast.makeText(getActivity(),"Your reservation has been successfully placed ! You will soon receive a confirmation call", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Your reservation has been successfully placed ! You will soon receive a confirmation call", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getActivity(), ModeSelection.class);
                         startActivity(intent);
                     }
@@ -194,6 +198,7 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
                     }
                 });
 
+                }
             }
         }
     }

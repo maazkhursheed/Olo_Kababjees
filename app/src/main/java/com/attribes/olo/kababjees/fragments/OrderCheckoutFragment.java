@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.attribes.olo.kababjees.Interfaces.OnDrawerEnableDisable;
 import com.attribes.olo.kababjees.Interfaces.OnDrawerToggleListner;
 import com.attribes.olo.kababjees.Screens.MainActivity;
@@ -218,9 +219,15 @@ public class OrderCheckoutFragment extends Fragment{
     private class InfoCheckListner implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            UserInfo infofragment = new UserInfo();
-            android.app.FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_container, infofragment).commit();
+
+            if(subTotal < 499){
+                Toast.makeText(getActivity(),"Order will be placed with a minimum of Rs: 499/=",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                UserInfo infofragment = new UserInfo();
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.frame_container, infofragment).commit();
+            }
 
         }
     }

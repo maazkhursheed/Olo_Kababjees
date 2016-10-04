@@ -16,9 +16,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.attribes.olo.kababjees.Interfaces.OnDrawerEnableDisable;
 import com.attribes.olo.kababjees.Interfaces.OnDrawerToggleListner;
+import com.attribes.olo.kababjees.R;
 import com.attribes.olo.kababjees.Screens.MainActivity;
 import com.attribes.olo.kababjees.cart.ItemCart;
-import com.attribes.olo.kababjees.R;
+
 
 /**
  * Created by Maaz on 6/9/2016.

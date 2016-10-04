@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "930865300230",
+    "firebase_url": "https://kababjeesanalytics.firebaseio.com",
+    "project_id": "kababjeesanalytics",
+    "storage_bucket": "kababjeesanalytics.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930865300230:android:da35f3bf9560628f",
+        "android_client_info": {
+          "package_name": "com.attribes.olo.kababjees"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930865300230-t638tea4u00mhbg760p8pcrmbrfojosh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0FVur2SYxqmHXSRkUdoEKJkjSTveQCEg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

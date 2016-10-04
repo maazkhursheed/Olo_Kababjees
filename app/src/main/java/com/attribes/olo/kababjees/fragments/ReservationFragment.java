@@ -169,7 +169,7 @@ public class ReservationFragment extends Fragment implements TimePickerDialog.On
                 int branchID = branchId;
 
                 if (personCount < 2) {
-                    getPersonsCount.setError("Reservation can be done for minimum of 2 persons");
+                    getPersonsCount.setError("Minimum 2 persons");
                 }
 
                 else{

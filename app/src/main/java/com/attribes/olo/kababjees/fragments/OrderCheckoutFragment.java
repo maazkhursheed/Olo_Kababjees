@@ -221,7 +221,7 @@ public class OrderCheckoutFragment extends Fragment{
         public void onClick(View view) {
 
             if(subTotal < 499){
-                Toast.makeText(getActivity(),"Order will be placed with a minimum of Rs: 499/=",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Order will be placed with a minimum of Rs: 499/=",Toast.LENGTH_LONG).show();
             }
             else{
                 UserInfo infofragment = new UserInfo();
